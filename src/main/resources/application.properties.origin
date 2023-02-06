@@ -1,0 +1,22 @@
+spring.datasource.url= jdbc:postgresql://localhost:5432/
+spring.datasource.username=
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=
+
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=
+spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.PostgreSQLDialect
+
+# Swagger
+spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
+
+# Jwt token
+app.jwtSecret=
+app.expiration=
+
+# Mail sender
+spring.mail.host=
+spring.mail.port=
+spring.mail.username=
+spring.mail.password=
+spring.mail.properties.mail.smtp.auth=
+spring.mail.properties.mail.smtp.starttls.enable=
