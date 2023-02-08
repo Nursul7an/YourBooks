@@ -1,4 +1,4 @@
-package jun.dev.yourbooks.model.wraper;
+package jun.dev.yourbooks.model.wraper.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

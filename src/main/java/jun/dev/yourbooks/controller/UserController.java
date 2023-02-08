@@ -1,12 +1,16 @@
 package jun.dev.yourbooks.controller;
 
-import jun.dev.yourbooks.model.wraper.LoginRequest;
-import jun.dev.yourbooks.model.wraper.RegisterRequest;
-import jun.dev.yourbooks.model.wraper.ResetPasswordRequest;
+import jun.dev.yourbooks.model.dto.UserDto;
+import jun.dev.yourbooks.model.entity.User;
+import jun.dev.yourbooks.model.wraper.request.LoginRequest;
+import jun.dev.yourbooks.model.wraper.request.RegisterRequest;
+import jun.dev.yourbooks.model.wraper.request.ResetPasswordRequest;
+import jun.dev.yourbooks.model.wraper.request.UserEditRequest;
 import jun.dev.yourbooks.model.wraper.response.ResponseJWT;
 import jun.dev.yourbooks.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,5 +46,10 @@ public class UserController {
                                     @Valid @RequestBody ResetPasswordRequest request){
         userService.resetPassword(link,request);
         return ResponseEntity.ok("You successfully reset password");
+    }
+    @PostMapping("/edit")
+    ResponseEntity<UserDto> editUser(@Valid @RequestBody UserEditRequest editRequest,
+                                     @AuthenticationPrincipal User user){
+        return ResponseEntity.ok(userService.edit(editRequest,user));
     }
 }
