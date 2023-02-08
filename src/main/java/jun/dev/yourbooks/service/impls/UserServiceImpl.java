@@ -6,12 +6,14 @@ import jun.dev.yourbooks.exception.NotFoundException;
 import jun.dev.yourbooks.mapper.ActivationTokenMapper;
 import jun.dev.yourbooks.mapper.ResetPasswordMapper;
 import jun.dev.yourbooks.mapper.UserMapper;
+import jun.dev.yourbooks.model.dto.UserDto;
 import jun.dev.yourbooks.model.entity.ActivationToken;
 import jun.dev.yourbooks.model.entity.ResetPassword;
 import jun.dev.yourbooks.model.entity.User;
-import jun.dev.yourbooks.model.wraper.LoginRequest;
-import jun.dev.yourbooks.model.wraper.RegisterRequest;
-import jun.dev.yourbooks.model.wraper.ResetPasswordRequest;
+import jun.dev.yourbooks.model.wraper.request.LoginRequest;
+import jun.dev.yourbooks.model.wraper.request.RegisterRequest;
+import jun.dev.yourbooks.model.wraper.request.ResetPasswordRequest;
+import jun.dev.yourbooks.model.wraper.request.UserEditRequest;
 import jun.dev.yourbooks.model.wraper.response.ResponseJWT;
 import jun.dev.yourbooks.repository.ActivationTokenRepo;
 import jun.dev.yourbooks.repository.ResetPasswordRepo;
@@ -92,6 +94,19 @@ public class UserServiceImpl implements UserService {
         User user = findUserByEmail(resetPassword.getUser().getEmail());
         user.setPassword(encoder.encode(request.getRepeatPassword()));
         userRepo.save(user);
+    }
+
+    @Override
+    public UserDto edit(UserEditRequest editRequest, User user) {
+        String imageUrl = checkAvatar(editRequest.getImageUrl());
+        User editedUser = userMapper.toUserFromEdit(editRequest,imageUrl,user);
+        userRepo.save(editedUser);
+        return userMapper.toDto(editedUser);
+    }
+    private String checkAvatar(String imageUrl){
+        if (imageUrl == null) {
+            return "anon.jpg";
+        }else return imageUrl;
     }
 
     private ActivationToken validateActivationLink(String link){
