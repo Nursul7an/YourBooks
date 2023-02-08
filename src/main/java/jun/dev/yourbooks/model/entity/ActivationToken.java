@@ -27,6 +27,8 @@ public class ActivationToken {
     String email;
     @Column(name = "password",nullable = false)
     String password;
+    @Column(name = "link",nullable = false)
+    String link;
     @Column(name = "created_at", updatable = false, nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
