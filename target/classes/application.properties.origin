@@ -1,0 +1,28 @@
+spring.datasource.url= jdbc:postgresql://
+spring.datasource.username=
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=
+
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation= true
+spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.PostgreSQLDialect
+
+# Swagger
+spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
+
+# Jwt token
+app.jwtSecret=
+app.expiration=
+
+# Mail sender
+spring.mail.host=
+spring.mail.port=
+spring.mail.username=
+spring.mail.password=
+spring.mail.properties.mail.smtp.auth=
+spring.mail.properties.mail.smtp.starttls.enable=
+
+#gcp
+gcp.config.file=
+gcp.project.id=
+gcp.bucket.id=
+gcp.dir.name=
