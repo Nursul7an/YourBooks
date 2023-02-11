@@ -1,9 +1,9 @@
-spring.datasource.url= jdbc:postgresql://localhost:5432/
+spring.datasource.url= jdbc:postgresql://
 spring.datasource.username=
 spring.datasource.password=
 spring.jpa.hibernate.ddl-auto=
 
-spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation= true
 spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.PostgreSQLDialect
 
 # Swagger
@@ -20,3 +20,9 @@ spring.mail.username=
 spring.mail.password=
 spring.mail.properties.mail.smtp.auth=
 spring.mail.properties.mail.smtp.starttls.enable=
+
+#gcp
+gcp.config.file=
+gcp.project.id=
+gcp.bucket.id=
+gcp.dir.name=
