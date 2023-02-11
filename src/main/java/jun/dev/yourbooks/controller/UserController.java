@@ -48,7 +48,7 @@ public class UserController {
         return ResponseEntity.ok("You successfully reset password");
     }
     @PostMapping("/edit")
-    ResponseEntity<UserDto> editUser(@Valid @RequestBody UserEditRequest editRequest,
+    ResponseEntity<UserDto> editUser(@Valid @ModelAttribute UserEditRequest editRequest,
                                      @AuthenticationPrincipal User user){
         return ResponseEntity.ok(userService.edit(editRequest,user));
     }

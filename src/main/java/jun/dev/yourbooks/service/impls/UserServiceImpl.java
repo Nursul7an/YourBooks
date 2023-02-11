@@ -2,6 +2,7 @@ package jun.dev.yourbooks.service.impls;
 
 import jun.dev.yourbooks.exception.EmailExistException;
 import jun.dev.yourbooks.exception.ExpiredException;
+import jun.dev.yourbooks.exception.FileException;
 import jun.dev.yourbooks.exception.NotFoundException;
 import jun.dev.yourbooks.mapper.ActivationTokenMapper;
 import jun.dev.yourbooks.mapper.ResetPasswordMapper;
@@ -20,6 +21,7 @@ import jun.dev.yourbooks.repository.ResetPasswordRepo;
 import jun.dev.yourbooks.repository.UserRepo;
 import jun.dev.yourbooks.service.MailService;
 import jun.dev.yourbooks.service.UserService;
+import jun.dev.yourbooks.util.CloudStorage;
 import jun.dev.yourbooks.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -45,6 +48,7 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
     private final ResetPasswordMapper resetPasswordMapper;
     private final ResetPasswordRepo resetPasswordRepo;
+    private final CloudStorage cloudStorage;
     @Override
     public void register(RegisterRequest request) {
         if (userRepo.existsUserByEmail(request.getEmail()))
@@ -98,15 +102,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto edit(UserEditRequest editRequest, User user) {
-        String imageUrl = checkAvatar(editRequest.getImageUrl());
+        String imageUrl = checkAvatar(editRequest.getImageFile());
         User editedUser = userMapper.toUserFromEdit(editRequest,imageUrl,user);
         userRepo.save(editedUser);
         return userMapper.toDto(editedUser);
     }
-    private String checkAvatar(String imageUrl){
-        if (imageUrl == null) {
+    private String checkAvatar(MultipartFile file){
+        if (file == null)
             return "anon.jpg";
-        }else return imageUrl;
+        if (!cloudStorage.isImageFile(file))
+                throw new FileException("Avatar is not image file!");
+        return cloudStorage.uploadFile(file);
     }
 
     private ActivationToken validateActivationLink(String link){

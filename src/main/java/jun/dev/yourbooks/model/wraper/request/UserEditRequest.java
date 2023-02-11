@@ -2,8 +2,10 @@ package jun.dev.yourbooks.model.wraper.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -19,6 +21,6 @@ public class UserEditRequest {
     String email;
     @NotBlank
     String password;
-
-    String imageUrl;
+    @NotNull
+    MultipartFile imageFile;
 }
