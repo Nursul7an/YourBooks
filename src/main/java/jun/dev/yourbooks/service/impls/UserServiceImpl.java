@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
     private final ResetPasswordMapper resetPasswordMapper;
     private final ResetPasswordRepo resetPasswordRepo;
     private final CloudStorage cloudStorage;
+
     @Override
     public void register(RegisterRequest request) {
         if (userRepo.existsUserByEmail(request.getEmail()))
@@ -57,9 +58,9 @@ public class UserServiceImpl implements UserService {
         request.setPassword(encoder.encode(request.getPassword()));
         ActivationToken activationToken = activationTokenMapper.toEntity(request);
         ActivationToken link = activationTokenRepo.save(activationToken);
-        mailService.sendMessage(link.getEmail(),"Activate account", "Here is the link below, " +
+        mailService.sendMessage(link.getEmail(), "Activate account", "Here is the link below, " +
                 "please click to activate account \n" +
-                "localhost:8080/user/activate/"+link.getLink());
+                "localhost:8080/user/activate/" + link.getLink());
     }
 
     @Override
@@ -72,12 +73,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<ResponseJWT> login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtil.generateToken(authentication);
         User user = (User) authentication.getPrincipal();
-        return ResponseEntity.ok(userMapper.toJwt(user,jwt));
+        return ResponseEntity.ok(userMapper.toJwt(user, jwt));
     }
 
     @Override
@@ -85,8 +86,8 @@ public class UserServiceImpl implements UserService {
         User user = findUserByEmail(email);
         ResetPassword link = resetPasswordMapper.toResetPassword(user);
         ResetPassword savedLink = resetPasswordRepo.save(link);
-        mailService.sendMessage(user.getEmail(),"Reset password", "Here is the link bellow, click to reset password" +
-                "\n localhost:8080/user/reset/password/" +savedLink.getLink());
+        mailService.sendMessage(user.getEmail(), "Reset password", "Here is the link bellow, click to reset password" +
+                "\n localhost:8080/user/reset/password/" + savedLink.getLink());
     }
 
     @Override
@@ -103,20 +104,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto edit(UserEditRequest editRequest, User user) {
         String imageUrl = checkAvatar(editRequest.getImageFile());
-        User editedUser = userMapper.toUserFromEdit(editRequest,imageUrl,user);
+        checkExistingImageAndDelete(user.getAvatarUrl());
+        User editedUser = userMapper.toUserFromEdit(editRequest, imageUrl, user);
         userRepo.save(editedUser);
         return userMapper.toDto(editedUser);
     }
-    private String checkAvatar(MultipartFile file){
+
+    @Override
+    public UserDto findUserById(Long id) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("No such a user found with " + id));
+        return userMapper.toDto(user);
+    }
+
+    private String checkAvatar(MultipartFile file) {
         if (file == null)
             return "anon.jpg";
         if (!cloudStorage.isImageFile(file))
-                throw new FileException("Avatar is not image file!");
+            throw new FileException("Avatar is not image file!");
         return cloudStorage.uploadFile(file);
     }
 
-    private ActivationToken validateActivationLink(String link){
-        ActivationToken activationToken = activationTokenRepo.findActivationTokenByLink(link).orElseThrow(()->
+    private ActivationToken validateActivationLink(String link) {
+        ActivationToken activationToken = activationTokenRepo.findActivationTokenByLink(link).orElseThrow(() ->
                 new NotFoundException("The link doesn't exist"));
         if (activationToken.getCreatedAt().plusMinutes(30).isBefore(LocalDateTime.now())) {
             throw new ExpiredException("The link has been expired");
@@ -124,15 +134,25 @@ public class UserServiceImpl implements UserService {
         activationTokenRepo.delete(activationToken);
         return activationToken;
     }
-    private ResetPassword validateResetPasswordLink(String link){
-        ResetPassword resetPassword = resetPasswordRepo.findResetPasswordByLink(link).orElseThrow(()->
+
+    private ResetPassword validateResetPasswordLink(String link) {
+        ResetPassword resetPassword = resetPasswordRepo.findResetPasswordByLink(link).orElseThrow(() ->
                 new NotFoundException("No such a link exists!"));
         if (resetPassword.getCreatedAt().plusMinutes(30).isBefore(LocalDateTime.now()))
             throw new ExpiredException("This link has been expired");
         return resetPassword;
     }
-    private  User findUserByEmail (String email){
+
+    private User findUserByEmail(String email) {
         return userRepo.findUserByEmail(email)
-                .orElseThrow(()-> new NotFoundException("No such a user found with email "+ email));
+                .orElseThrow(() -> new NotFoundException("No such a user found with email " + email));
     }
+
+    private void checkExistingImageAndDelete(String imageUrl) {
+        if (!imageUrl.equals("anon.jpg")) {
+            String imageName = imageUrl.substring(48);
+            cloudStorage.deleteImage(imageName);
+        }
+    }
+
 }

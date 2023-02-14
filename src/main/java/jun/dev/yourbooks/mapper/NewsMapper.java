@@ -27,4 +27,11 @@ public class NewsMapper {
                 .createdTime(savedNews.getCreatedTime())
                 .build();
     }
+
+    public News toUpdateNews(News news, NewsRequest newsRequest,String image) {
+        news.setTitle(newsRequest.getTitle());
+        news.setDescription(newsRequest.getDescription());
+        news.setImageUrl(image);
+        return news;
+    }
 }

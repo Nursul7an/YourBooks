@@ -1,10 +1,7 @@
 package jun.dev.yourbooks.util;
 
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.*;
 import jun.dev.yourbooks.exception.FileException;
 import jun.dev.yourbooks.exception.GCPFileUploadException;
 import org.apache.commons.io.FileUtils;
@@ -51,9 +48,8 @@ public class CloudStorage {
                 .setCredentials(GoogleCredentials.fromStream(inputStream)).build();
         Storage storage = options.getService();
         Bucket bucket = storage.get(gcpBucketId, Storage.BucketGetOption.fields());
-        String randomId = UUID.randomUUID().toString();
-        Blob blob = bucket.create(gcpDirectoryName+ "/" +
-                randomId + "." + FilenameUtils.getBaseName(fileName),fileData,contentType);
+        String imageName = imageName(fileName);
+        Blob blob = bucket.create(gcpDirectoryName+ "/" +imageName,fileData,contentType);
         if (blob != null) {
             return storage.getOptions().getHost() + "/" +
                     blob.getBucket() + "/" +
@@ -66,5 +62,18 @@ public class CloudStorage {
         Set<String> extensions = Set.of("jpg", "jpeg", "img", "png", "svg");
         return extensions.contains(extension);
     }
+    public String imageName (String fileName){
+        String randomId = UUID.randomUUID().toString();
+        return randomId + "." + FilenameUtils.getBaseName(fileName);
+    }
 
+    public void deleteImage(String imageName)  {
+        Storage storage = StorageOptions.newBuilder().setProjectId(gcpProjectId).build().getService();
+        Blob blob = storage.get(gcpBucketId, imageName);
+        if (blob == null) {
+            throw new RuntimeException("No object found with name "+imageName);
+        }
+        Storage.BlobSourceOption precondition = Storage.BlobSourceOption.generationMatch(blob.getGeneration());
+        storage.delete(gcpBucketId, imageName, precondition);
+    }
 }
