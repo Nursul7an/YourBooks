@@ -21,4 +21,6 @@ public interface UserService {
     void resetPassword(String link, ResetPasswordRequest request);
 
     UserDto edit(UserEditRequest editRequest, User user);
+
+    UserDto findUserById(Long id);
 }

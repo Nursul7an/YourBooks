@@ -30,4 +30,9 @@ public class NewsController {
     public ResponseEntity<Page<NewsDto>> getRecentNews(@PageableDefault(size = 5)Pageable pageable){
         return ResponseEntity.ok(newsService.findRecentNews(pageable));
     }
+    @PutMapping("/update")
+    public ResponseEntity<NewsDto> updateNews(@RequestParam Long bookId,
+                                              @ModelAttribute NewsRequest newsRequest){
+        return ResponseEntity.ok(newsService.editNews(bookId,newsRequest));
+    }
 }

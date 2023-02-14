@@ -52,4 +52,8 @@ public class UserController {
                                      @AuthenticationPrincipal User user){
         return ResponseEntity.ok(userService.edit(editRequest,user));
     }
+    @GetMapping("/get/by/id")
+    public ResponseEntity<UserDto> getUserById(@RequestParam Long id){
+        return ResponseEntity.ok(userService.findUserById(id));
+    }
 }
