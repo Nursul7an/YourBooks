@@ -39,7 +39,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Clean and Build with Maven
-        run: mvn clean install
+        run: re-run Maven with the -e switch
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Update dependency graph
