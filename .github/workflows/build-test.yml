@@ -56,6 +56,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Docker-compose
+          file: ./Docker-compose.yml
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/your-books:latest
