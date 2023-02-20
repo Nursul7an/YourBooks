@@ -1,7 +1,7 @@
 package jun.dev.yourbooks.controller;
 
 import jun.dev.yourbooks.model.dto.NewsDto;
-import jun.dev.yourbooks.model.wraper.request.NewsRequest;
+import jun.dev.yourbooks.model.dto.request.NewsRequest;
 import jun.dev.yourbooks.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

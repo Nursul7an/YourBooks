@@ -62,6 +62,11 @@ public class CloudStorage {
         Set<String> extensions = Set.of("jpg", "jpeg", "img", "png", "svg");
         return extensions.contains(extension);
     }
+    public void checkBook(MultipartFile file) throws FileException {
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        if (!"pdf".equals(extension))
+            throw new FileException("Book's extension is not correct!");
+    }
     public String imageName (String fileName){
         String randomId = UUID.randomUUID().toString();
         return randomId + "." + FilenameUtils.getBaseName(fileName);

@@ -1,25 +1,26 @@
-package jun.dev.yourbooks.model.wraper.request;
+package jun.dev.yourbooks.model.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RegisterRequest {
+public class UserEditRequest {
     @NotBlank
     String name;
     @NotBlank
     String surname;
     @NotBlank
-    @Size(min = 5, max = 50)
-    String password;
-    @NotBlank
     String email;
-
+    @NotBlank
+    String password;
+    @NotNull
+    MultipartFile imageFile;
 }

@@ -2,7 +2,7 @@ package jun.dev.yourbooks.mapper;
 
 import jun.dev.yourbooks.model.dto.NewsDto;
 import jun.dev.yourbooks.model.entity.News;
-import jun.dev.yourbooks.model.wraper.request.NewsRequest;
+import jun.dev.yourbooks.model.dto.request.NewsRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

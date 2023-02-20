@@ -1,26 +1,32 @@
-package jun.dev.yourbooks.model.wraper.request;
+package jun.dev.yourbooks.model.dto.request;
 
+import jun.dev.yourbooks.model.enums.Style;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserEditRequest {
+public class BookRequest {
     @NotBlank
     String name;
     @NotBlank
-    String surname;
+    Style style;
     @NotBlank
-    String email;
+    String author;
+    @NonNull
+    LocalDateTime publishedDate;
     @NotBlank
-    String password;
-    @NotNull
-    MultipartFile imageFile;
+    String description;
+    @NonNull
+    MultipartFile image;
+    @NonNull
+    MultipartFile book;
+
 }

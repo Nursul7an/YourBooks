@@ -1,19 +1,18 @@
-package jun.dev.yourbooks.model.wraper.response;
+package jun.dev.yourbooks.model.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ResponseJWT {
-    String name;
-    String surname;
+public class LoginRequest {
+    @NotBlank
     String email;
-    String tokenType;
-    String role;
-    String token;
+    @NotBlank
+    String password;
 }

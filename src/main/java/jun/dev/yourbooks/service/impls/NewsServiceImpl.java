@@ -5,7 +5,7 @@ import jun.dev.yourbooks.exception.NotFoundException;
 import jun.dev.yourbooks.mapper.NewsMapper;
 import jun.dev.yourbooks.model.dto.NewsDto;
 import jun.dev.yourbooks.model.entity.News;
-import jun.dev.yourbooks.model.wraper.request.NewsRequest;
+import jun.dev.yourbooks.model.dto.request.NewsRequest;
 import jun.dev.yourbooks.repository.NewsRepo;
 import jun.dev.yourbooks.service.NewsService;
 import jun.dev.yourbooks.util.CloudStorage;
@@ -14,8 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor

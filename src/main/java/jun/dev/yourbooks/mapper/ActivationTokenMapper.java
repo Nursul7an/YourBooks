@@ -1,7 +1,7 @@
 package jun.dev.yourbooks.mapper;
 
 import jun.dev.yourbooks.model.entity.ActivationToken;
-import jun.dev.yourbooks.model.wraper.request.RegisterRequest;
+import jun.dev.yourbooks.model.dto.request.RegisterRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
