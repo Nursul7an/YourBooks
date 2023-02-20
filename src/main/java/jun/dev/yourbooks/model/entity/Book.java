@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jun.dev.yourbooks.model.enums.Style;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -41,4 +42,6 @@ public class Book {
     @Column(name = "published_year",nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd")
     LocalDate publishedYear;
+    @CreationTimestamp
+    LocalDate createdTime;
 }
