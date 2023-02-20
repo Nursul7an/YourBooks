@@ -1,11 +1,13 @@
 package jun.dev.yourbooks.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jun.dev.yourbooks.model.enums.Style;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -34,8 +36,9 @@ public class Book {
     String imageUrl;
     @Column(name = "book_url", nullable = false)
     String bookUrl;
-    @Column(name = "rating", columnDefinition = "0")
+    @Column(name = "rating")
     double rating;
-    @Column(name = "published-year", nullable = false)
-    LocalDateTime publishedYear;
+    @Column(name = "published_year",nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd")
+    LocalDate publishedYear;
 }

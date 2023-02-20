@@ -1,11 +1,10 @@
 package jun.dev.yourbooks.model.dto;
 
-import jun.dev.yourbooks.model.entity.User;
 import jun.dev.yourbooks.model.enums.Style;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,5 +21,5 @@ public class BookDto {
     String imageUrl;
     String bookUrl;
     double rating;
-    LocalDateTime publishedYear;
+    LocalDate publishedYear;
 }

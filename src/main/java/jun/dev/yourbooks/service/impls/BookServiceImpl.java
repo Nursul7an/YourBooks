@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
 
         Book book = bookMapper.toBook(imageUrl, bookUrl, bookRequest, publisher);
         Book savedBook = bookRepo.save(book);
-        return bookMapper.toDto(book);
+        return bookMapper.toDto(savedBook);
     }
     private String checkImageAndUpload(MultipartFile file){
         if (file == null)

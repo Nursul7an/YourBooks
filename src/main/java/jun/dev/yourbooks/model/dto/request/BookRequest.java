@@ -3,9 +3,11 @@ package jun.dev.yourbooks.model.dto.request;
 import jun.dev.yourbooks.model.enums.Style;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,8 +22,8 @@ public class BookRequest {
     Style style;
     @NotBlank
     String author;
-    @NonNull
-    LocalDateTime publishedDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    LocalDate publishedDate;
     @NotBlank
     String description;
     @NonNull

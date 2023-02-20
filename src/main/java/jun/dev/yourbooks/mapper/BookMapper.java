@@ -20,6 +20,8 @@ public class BookMapper {
                 .publisher(publisher)
                 .bookUrl(bookUrl)
                 .imageUrl(imageUrl)
+                .publishedYear(bookRequest.getPublishedDate())
+                .rating(0)
                 .build();
     }
 
