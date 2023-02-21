@@ -24,7 +24,11 @@ public class Blog {
     String text;
     Tag tag;
     @ManyToOne
+            @JoinColumn(name = "book_id")
     Book book;
+    @ManyToOne
+            @JoinColumn(name = "user_id")
+     User publisher;
     double rate;
     @CreationTimestamp
     LocalDate createdTime;
