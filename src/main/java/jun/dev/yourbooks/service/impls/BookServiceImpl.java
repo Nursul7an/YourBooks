@@ -6,6 +6,7 @@ import jun.dev.yourbooks.exception.NotFoundException;
 import jun.dev.yourbooks.mapper.BookMapper;
 import jun.dev.yourbooks.model.dto.BookDto;
 import jun.dev.yourbooks.model.dto.request.BookRequest;
+import jun.dev.yourbooks.model.dto.response.ResponseMyBooks;
 import jun.dev.yourbooks.model.entity.Book;
 import jun.dev.yourbooks.model.entity.User;
 import jun.dev.yourbooks.model.enums.Style;
@@ -74,7 +75,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> getMyBooks(User user) {
         List<Book> bookList = bookRepo.findAllByPublisher(user);
-        return bookList.stream().map(bookMapper::toDto).collect(Collectors.toList());
+        return bookList.stream().map(bookMapper::toDto)
+                .collect(Collectors.toList()) ;
     }
 
     public void deleteFile(String imageUrl){

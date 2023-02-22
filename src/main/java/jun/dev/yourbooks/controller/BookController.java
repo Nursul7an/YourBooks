@@ -2,6 +2,7 @@ package jun.dev.yourbooks.controller;
 
 import jun.dev.yourbooks.model.dto.BookDto;
 import jun.dev.yourbooks.model.dto.request.BookRequest;
+import jun.dev.yourbooks.model.dto.response.ResponseMyBooks;
 import jun.dev.yourbooks.model.entity.User;
 import jun.dev.yourbooks.model.enums.Style;
 import jun.dev.yourbooks.service.BookService;
@@ -28,7 +29,7 @@ public class BookController {
         bookService.deleteBook(bookId,publisher);
         return ResponseEntity.ok("You successfully deleted book with ID: "+bookId);
     }
-    @GetMapping("/find/new/book")
+    @GetMapping("/find/new")
     public ResponseEntity<List<BookDto>> findAll(){
         return ResponseEntity.ok(bookService.findAll());
     }
@@ -36,7 +37,7 @@ public class BookController {
     public ResponseEntity<List<BookDto>> findBookByStyle(@RequestParam Style style){
         return ResponseEntity.ok(bookService.findBookByStyle(style));
     }
-    @GetMapping("/find/author/book")
+    @GetMapping("/find/author/name")
     public ResponseEntity<List<BookDto>> findBookByAuthorOrName(@RequestParam String value){
         return ResponseEntity.ok(bookService.findBooksByAuthorOrBook(value));
     }
