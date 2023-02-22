@@ -5,7 +5,10 @@ import jun.dev.yourbooks.model.dto.request.BookRequest;
 import jun.dev.yourbooks.model.entity.Book;
 import jun.dev.yourbooks.model.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -39,4 +42,6 @@ public class BookMapper {
                 .publisherDto(userMapper.toDto(book.getPublisher()))
                 .build();
     }
+
+
 }
