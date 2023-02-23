@@ -14,6 +14,7 @@ import jun.dev.yourbooks.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +57,8 @@ public class BlogServiceImpl implements BlogService {
     private void updateRateBook(Book book, double averageRate){
         Book bookRate = bookRepo.findBookById(book.getId()).
                 orElseThrow(()-> new NotFoundException("No such a book found with "+ book.getId()));
-        bookRate.setRating(averageRate);
+        DecimalFormat format = new DecimalFormat("#.0");
+        bookRate.setRating(Double.parseDouble(format.format(averageRate)));
         bookRepo.save(bookRate);
     }
 }
