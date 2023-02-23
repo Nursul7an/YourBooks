@@ -1,6 +1,12 @@
 package jun.dev.yourbooks.model.enums;
 
 public enum Tag {
-    RECOMMENDATION
+    RECOMMENDATIONS,
+    DISCUSSIONS,
+    QUOTES,
+    THOUGHTS,
+    CRITICISMS,
+    REVIEWS
+
 
 }
