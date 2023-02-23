@@ -89,8 +89,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String download(Long id) {
-        // TODO : Complete download method
-        return null;
+        Book book = findBookById(id);
+        return book.getBookUrl();
     }
 
     @Override
@@ -114,5 +114,9 @@ public class BookServiceImpl implements BookService {
     private String checkBookAndUpload(MultipartFile file){
        cloudStorage.checkBook(file);
         return cloudStorage.uploadFile(file);
+    }
+    private Book findBookById(Long id){
+        return bookRepo.findBookById(id)
+                .orElseThrow(()-> new NotFoundException("No such a book found with id " + id));
     }
 }
