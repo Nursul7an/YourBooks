@@ -1,5 +1,6 @@
 package jun.dev.yourbooks.controller;
 
+import jun.dev.yourbooks.model.dto.BlogDto;
 import jun.dev.yourbooks.model.dto.BookDto;
 import jun.dev.yourbooks.model.dto.request.BookRequest;
 import jun.dev.yourbooks.model.dto.response.ResponseMyBooks;
@@ -30,7 +31,7 @@ public class BookController {
         return ResponseEntity.ok("You successfully deleted book with ID: "+bookId);
     }
     @GetMapping("/find/new")
-    public ResponseEntity<List<BookDto>> findAll(){
+    public ResponseEntity<List<BookDto>> findNewBooks(){
         return ResponseEntity.ok(bookService.findAll());
     }
     @GetMapping("/find/by/style")
@@ -44,6 +45,18 @@ public class BookController {
     @GetMapping("/my/books")
     public ResponseEntity<List<BookDto>> myBooks(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(bookService.getMyBooks(user));
+    }
+    @GetMapping("/find/by/top/rate")
+    public ResponseEntity<List<BookDto>> findByTopRate(){
+        return ResponseEntity.ok(bookService.findByTopRate());
+    }
+    @GetMapping("/download")
+    public ResponseEntity<String> downloadBook(@RequestParam Long id){
+        return ResponseEntity.ok(bookService.download(id));
+    }
+    @GetMapping("/read")
+    public ResponseEntity<String> readBook(@RequestParam Long id){
+        return ResponseEntity.ok(bookService.readBook(id));
     }
 
 }
