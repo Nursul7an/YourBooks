@@ -8,6 +8,7 @@ import jun.dev.yourbooks.model.dto.request.BlogRequest;
 import jun.dev.yourbooks.model.entity.Blog;
 import jun.dev.yourbooks.model.entity.Book;
 import jun.dev.yourbooks.model.entity.User;
+import jun.dev.yourbooks.model.enums.Tag;
 import jun.dev.yourbooks.repository.BlogRepo;
 import jun.dev.yourbooks.repository.BookRepo;
 import jun.dev.yourbooks.service.BlogService;
@@ -43,6 +44,12 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<BlogDto> getMyBlogs(User user) {
         List<Blog> blogs = blogRepo.findBlogsByPublisher(user);
+        return blogs.stream().map(blogMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BlogDto> getBlogsByTag(Tag tag) {
+        List<Blog> blogs = blogRepo.findAllByTag(tag);
         return blogs.stream().map(blogMapper::toDto).collect(Collectors.toList());
     }
 

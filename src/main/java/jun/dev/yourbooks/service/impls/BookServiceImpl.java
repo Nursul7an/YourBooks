@@ -4,9 +4,11 @@ import jun.dev.yourbooks.exception.FileException;
 import jun.dev.yourbooks.exception.NotAllowedException;
 import jun.dev.yourbooks.exception.NotFoundException;
 import jun.dev.yourbooks.mapper.BookMapper;
+import jun.dev.yourbooks.model.dto.BlogDto;
 import jun.dev.yourbooks.model.dto.BookDto;
 import jun.dev.yourbooks.model.dto.request.BookRequest;
 import jun.dev.yourbooks.model.dto.response.ResponseMyBooks;
+import jun.dev.yourbooks.model.entity.Blog;
 import jun.dev.yourbooks.model.entity.Book;
 import jun.dev.yourbooks.model.entity.User;
 import jun.dev.yourbooks.model.enums.Style;
@@ -77,6 +79,24 @@ public class BookServiceImpl implements BookService {
         List<Book> bookList = bookRepo.findAllByPublisher(user);
         return bookList.stream().map(bookMapper::toDto)
                 .collect(Collectors.toList()) ;
+    }
+
+    @Override
+    public List<BookDto> findByTopRate() {
+        List<Book> blogs = bookRepo.findAllByOrderByRatingDesc();
+        return blogs.stream().map(bookMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public String download(Long id) {
+        // TODO : Complete download method
+        return null;
+    }
+
+    @Override
+    public String readBook(Long id) {
+        // TODO : Complete read book method
+        return null;
     }
 
     public void deleteFile(String imageUrl){

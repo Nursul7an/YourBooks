@@ -1,5 +1,6 @@
 package jun.dev.yourbooks.service;
 
+import jun.dev.yourbooks.model.dto.BlogDto;
 import jun.dev.yourbooks.model.dto.BookDto;
 import jun.dev.yourbooks.model.dto.request.BookRequest;
 import jun.dev.yourbooks.model.dto.response.ResponseMyBooks;
@@ -21,4 +22,10 @@ public interface BookService {
     List<BookDto> findBooksByAuthorOrBook(String value);
 
     List<BookDto> getMyBooks(User user);
+
+    List<BookDto> findByTopRate();
+
+    String download(Long id);
+
+    String readBook(Long id);
 }
