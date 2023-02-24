@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.findByTopRate());
     }
     @GetMapping("/download")
-    public ResponseEntity<String> downloadBook(@RequestParam Long id){
+    public ResponseEntity<?> downloadBook(@RequestParam Long id){
         return ResponseEntity.ok(bookService.download(id));
     }
     @GetMapping("/read")

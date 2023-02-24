@@ -1,5 +1,6 @@
 package jun.dev.yourbooks.service.impls;
 
+import com.google.cloud.storage.Blob;
 import jun.dev.yourbooks.exception.FileException;
 import jun.dev.yourbooks.exception.NotAllowedException;
 import jun.dev.yourbooks.exception.NotFoundException;
@@ -20,7 +21,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.resource.HttpResource;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,21 +92,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String download(Long id) {
+    public String readBook(Long id) {
         Book book = findBookById(id);
         return book.getBookUrl();
     }
 
     @Override
-    public String readBook(Long id) {
-        // TODO : Complete read book method
-        return null;
+    public String download(Long id) {
+        Book book = findBookById(id);
+        String fileName = book.getBookUrl().substring(48);
+        return cloudStorage.downloadFile(fileName);
     }
-
     public void deleteFile(String imageUrl){
         String imageName = imageUrl.substring(48);
         cloudStorage.deleteImage(imageName);
     }
+
 
     private String checkImageAndUpload(MultipartFile file){
         if (file == null)

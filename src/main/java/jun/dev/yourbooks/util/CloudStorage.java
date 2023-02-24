@@ -1,22 +1,23 @@
 package jun.dev.yourbooks.util;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.storage.*;
 import jun.dev.yourbooks.exception.FileException;
 import jun.dev.yourbooks.exception.GCPFileUploadException;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.aspectj.util.FileUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.GeneralSecurityException;
+import java.net.URL;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class CloudStorage {
@@ -81,4 +82,21 @@ public class CloudStorage {
         Storage.BlobSourceOption precondition = Storage.BlobSourceOption.generationMatch(blob.getGeneration());
         storage.delete(gcpBucketId, imageName, precondition);
     }
+    public String downloadFile(String fileName) {
+        Storage storage = StorageOptions.newBuilder().setProjectId(gcpProjectId).build().getService();
+        Blob blob = storage.get(gcpBucketId, fileName);
+
+        URL signedUrl = null;
+        try {
+            signedUrl = storage.signUrl(BlobInfo.newBuilder(gcpBucketId, fileName).build(),
+                    1, TimeUnit.DAYS, Storage.SignUrlOption.signWith(ServiceAccountCredentials.fromStream(
+                            new FileInputStream(gcpFileConfig))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return signedUrl.toString();
+
+    }
+
+
 }
