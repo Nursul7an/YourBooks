@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok(userService.edit(editRequest,user));
     }
     @GetMapping("/get/by/id")
-    public ResponseEntity<UserDto> getUserById(@RequestParam Long id){
-        return ResponseEntity.ok(userService.findUserById(id));
+    public ResponseEntity<UserDto> getUserById(@PathVariable(name = "userId") Long userId){
+        return ResponseEntity.ok(userService.findUserById(userId));
     }
 }

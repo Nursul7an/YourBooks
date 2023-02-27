@@ -1,8 +1,17 @@
 package jun.dev.yourbooks.util;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
+import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.storage.*;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import jun.dev.yourbooks.exception.FileException;
 import jun.dev.yourbooks.exception.GCPFileUploadException;
 import org.apache.commons.io.FilenameUtils;
@@ -11,13 +20,14 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class CloudStorage {
@@ -31,10 +41,10 @@ public class CloudStorage {
     @Value("${gcp.dir.name}")
     private String gcpDirectoryName;
 
-    public String uploadFile(MultipartFile file){
+    public String uploadFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         if (fileName == null) throw new NullPointerException("File name is null");
-        try{
+        try {
             String contentType = file.getContentType();
             byte[] fileData = file.getBytes();
             return uploadToStorage(fileName, fileData, contentType);
@@ -50,7 +60,7 @@ public class CloudStorage {
         Storage storage = options.getService();
         Bucket bucket = storage.get(gcpBucketId, Storage.BucketGetOption.fields());
         String imageName = imageName(fileName);
-        Blob blob = bucket.create(gcpDirectoryName+ "/" +imageName,fileData,contentType);
+        Blob blob = bucket.create(gcpDirectoryName + "/" + imageName, fileData, contentType);
         if (blob != null) {
             return storage.getOptions().getHost() + "/" +
                     blob.getBucket() + "/" +
@@ -58,45 +68,33 @@ public class CloudStorage {
         }
         throw new GCPFileUploadException("An error occurred while storing data to GCS");
     }
+
     public boolean isImageFile(MultipartFile file) {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         Set<String> extensions = Set.of("jpg", "jpeg", "img", "png", "svg");
         return extensions.contains(extension);
     }
+
     public void checkBook(MultipartFile file) throws FileException {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         if (!"pdf".equals(extension))
             throw new FileException("Book's extension is not correct!");
     }
-    public String imageName (String fileName){
+
+    public String imageName(String fileName) {
         String randomId = UUID.randomUUID().toString();
         return randomId + "." + FilenameUtils.getBaseName(fileName);
     }
 
-    public void deleteImage(String imageName)  {
+    public void deleteImage(String imageName) {
         Storage storage = StorageOptions.newBuilder().setProjectId(gcpProjectId).build().getService();
         Blob blob = storage.get(gcpBucketId, imageName);
         if (blob == null) {
-            throw new RuntimeException("No object found with name "+imageName);
+            throw new RuntimeException("No object found with name " + imageName);
         }
         Storage.BlobSourceOption precondition = Storage.BlobSourceOption.generationMatch(blob.getGeneration());
         storage.delete(gcpBucketId, imageName, precondition);
     }
-    public String downloadFile(String fileName) {
-        Storage storage = StorageOptions.newBuilder().setProjectId(gcpProjectId).build().getService();
-        Blob blob = storage.get(gcpBucketId, fileName);
-
-        URL signedUrl = null;
-        try {
-            signedUrl = storage.signUrl(BlobInfo.newBuilder(gcpBucketId, fileName).build(),
-                    1, TimeUnit.DAYS, Storage.SignUrlOption.signWith(ServiceAccountCredentials.fromStream(
-                            new FileInputStream(gcpFileConfig))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return signedUrl.toString();
-
-    }
-
 
 }
+

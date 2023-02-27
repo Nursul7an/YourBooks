@@ -21,17 +21,17 @@ public class NewsController {
     public ResponseEntity<NewsDto> addNews(@Valid @ModelAttribute NewsRequest newsRequest){
         return ResponseEntity.ok(newsService.createNews(newsRequest));
     }
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteNews(@RequestParam Long id){
+    @DeleteMapping("/delete/{newsId}")
+    public ResponseEntity<?> deleteNews(@PathVariable(name = "newsId") Long id){
         newsService.delete(id);
         return ResponseEntity.ok("You successfully deleted the post");
     }
-    @GetMapping("/all/news")
+    @GetMapping("/all/recent")
     public ResponseEntity<Page<NewsDto>> getRecentNews(@PageableDefault(size = 5)Pageable pageable){
         return ResponseEntity.ok(newsService.findRecentNews(pageable));
     }
-    @PutMapping("/update")
-    public ResponseEntity<NewsDto> updateNews(@RequestParam Long bookId,
+    @PutMapping("/update/{bookId}")
+    public ResponseEntity<NewsDto> updateNews(@PathVariable(name = "bookId") Long bookId,
                                               @ModelAttribute NewsRequest newsRequest){
         return ResponseEntity.ok(newsService.editNews(bookId,newsRequest));
     }
