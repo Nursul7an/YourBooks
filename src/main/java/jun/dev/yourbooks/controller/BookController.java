@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/book")
 public class BookController {
     private final BookService bookService;
-    @PostMapping("add")
+    @PostMapping("/add")
     public ResponseEntity<BookDto> addBook(@Valid @ModelAttribute BookRequest bookRequest,
                                            @AuthenticationPrincipal User publisher){
         return ResponseEntity.ok(bookService.publishBook(bookRequest, publisher));

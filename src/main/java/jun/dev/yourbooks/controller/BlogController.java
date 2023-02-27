@@ -28,7 +28,7 @@ public class BlogController {
         blogService.delete(id, user);
         return ResponseEntity.ok("You successfully deleted blog with id " + id);
     }
-    @GetMapping("my/blog")
+    @GetMapping("/my")
     public ResponseEntity<List<BlogDto>> myBlogs(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(blogService.getMyBlogs(user));
     }

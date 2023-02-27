@@ -20,12 +20,12 @@ public class FavouritesController {
                                                          @AuthenticationPrincipal User user){
         return ResponseEntity.ok(favouritesService.select(bookId,user));
     }
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> delete(@RequestParam Long bookId, @AuthenticationPrincipal User user){
+    @DeleteMapping("/delete/{bookId}")
+    public ResponseEntity<?> delete(@PathVariable(name = "bookId") Long bookId, @AuthenticationPrincipal User user){
         favouritesService.delete(bookId, user);
         return ResponseEntity.ok("You successfully delete.");
     }
-    @GetMapping("/my/favourite/books")
+    @GetMapping("/my/favourites/")
     public ResponseEntity<List<FavouritesDto>> myFavouritesBook(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(favouritesService.myFavouriteBooks(user));
     }
